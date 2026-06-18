@@ -1,0 +1,17 @@
+[Unit]
+Description=OTS BEE WEB - 벌 질병탐지 (YOLOv8)
+After=network.target
+
+[Service]
+Type=simple
+# 실제 배포 경로/사용자에 맞게 수정하세요. (install.sh 를 쓰면 자동 생성됨)
+User=ubuntu
+WorkingDirectory=/opt/OTS_BEE_WEB/backend
+Environment=PORT=5721
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/OTS_BEE_WEB/backend/venv/bin/uvicorn main:app --host 0.0.0.0 --port 5721 --workers 1 --timeout-keep-alive 300
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
