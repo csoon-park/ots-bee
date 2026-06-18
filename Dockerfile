@@ -18,6 +18,12 @@ RUN pip install --no-cache-dir torch torchvision \
 COPY backend/requirements.txt ./backend/requirements.txt
 RUN pip install --no-cache-dir -r backend/requirements.txt
 
+# ultralytics 가 의존성으로 풀버전 opencv-python(libxcb 등 X11 필요)을 다시 끌어온다.
+# slim 이미지엔 X11 라이브러리가 없어 `import cv2` 가 ImportError 로 죽으므로,
+# 모든 opencv 변형을 제거하고 GUI 의존성이 없는 headless 만 남긴다.
+RUN pip uninstall -y opencv-python opencv-python-headless opencv-contrib-python || true \
+    && pip install --no-cache-dir opencv-python-headless
+
 # 애플리케이션 소스
 COPY backend ./backend
 COPY frontend ./frontend
